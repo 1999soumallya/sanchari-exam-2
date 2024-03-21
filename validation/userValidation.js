@@ -3,29 +3,26 @@ const userModel = require("../models/userModel");
 
 exports.registrationValidation = [
     body('name').notEmpty({ ignore_whitespace: true }).withMessage('Provide your name for create your account'),
-    body('username').notEmpty({ ignore_whitespace: true }).withMessage('Provide your username for create your account').isEmail().withMessage('Provide valid username for create your account').custom(value => { 
-        return userModel.findOne({ username: value }).then(result => {
-            if (result) {
-                return Promise.reject("Username already exists provide valid username for create your account");
-            }
-            return Promise.resolve(true);
-        });
+    body('username').notEmpty({ ignore_whitespace: true }).withMessage('Provide your username for create your account').isEmail().withMessage('Provide valid username for create your account').custom(async value => { 
+        const result = await userModel.findOne({ username: value });
+        if (result) {
+            return Promise.reject("Username already exists provide valid username for create your account");
+        }
+        return await Promise.resolve(true);
     }),
-    body('email').notEmpty({ ignore_whitespace: true }).withMessage('Provide your email id for create your account').isEmail().withMessage('Provide valid email id for create your account').custom(value => {
-        return userModel.findOne({ email: value }).then(result => {
-            if (result) {
-                return Promise.reject("Email Id already exists provide valid email id for create your account");
-            }
-            return Promise.resolve(true);
-        });
+    body('email').notEmpty({ ignore_whitespace: true }).withMessage('Provide your email id for create your account').isEmail().withMessage('Provide valid email id for create your account').custom(async value => {
+        const result = await userModel.findOne({ email: value });
+        if (result) {
+            return Promise.reject("Email Id already exists provide valid email id for create your account");
+        }
+        return await Promise.resolve(true);
     }),
-    body('mobile').notEmpty({ ignore_whitespace: true }).withMessage('Provide your mobile number for create your account').isMobilePhone('en-IN').withMessage('Provide valid mobile number for create your account').custom(value => { 
-        return userModel.findOne({ mobile: value }).then(result => {
-            if (result) {
-                return Promise.reject("Mobile Number already exists provide valid mobile number for create your account");
-            }
-            return Promise.resolve(true);
-        });
+    body('mobile').notEmpty({ ignore_whitespace: true }).withMessage('Provide your mobile number for create your account').isMobilePhone('en-IN').withMessage('Provide valid mobile number for create your account').custom(async value => { 
+        const result = await userModel.findOne({ mobile: value });
+        if (result) {
+            return Promise.reject("Mobile Number already exists provide valid mobile number for create your account");
+        }
+        return await Promise.resolve(true);
     }),
     body('password').notEmpty({ ignore_whitespace: true }).withMessage('Provide your password for create your account').isLength({ min: 8 }).withMessage('Provide valid password for create your account').custom((value, { req }) => {
         if (value != req.body.confirmPassword) {
