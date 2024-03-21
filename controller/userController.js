@@ -5,7 +5,7 @@ exports.registration = async (req, res) => {
     try {
         const { name, email, mobile, username, password } = req.body
 
-        userModel.create({ name, email, mobile, username, password: await encryptPassword(password) }).then(() => {
+        userModel.create({ name, email: email.toLowerCase(), mobile, username, password: await encryptPassword(password) }).then(() => {
             res.status(200).json({ message: 'User is successfully registered', success: true })
         }).catch(err => {
             res.status(400).json({ message: 'User registration process failed', error: err.stack, success: false })
