@@ -3,7 +3,7 @@ const userModel = require("../models/userModel");
 
 exports.registrationValidation = [
     body('name').notEmpty({ ignore_whitespace: true }).withMessage('Provide your name for create your account'),
-    body('username').notEmpty({ ignore_whitespace: true }).withMessage('Provide your username for create your account').isEmail().withMessage('Provide valid username for create your account').custom(async value => { 
+    body('username').notEmpty({ ignore_whitespace: true }).withMessage('Provide your username for create your account').custom(async value => { 
         const result = await userModel.findOne({ username: value });
         if (result) {
             return Promise.reject("Username already exists provide valid username for create your account");
