@@ -17,10 +17,12 @@ const productSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    product_image: {
-        type: String,
-        required: true
-    },
+    product_image: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'productImages'
+        }
+    ],
     discount: {
         type: Number,
         required: true

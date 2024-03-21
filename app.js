@@ -19,6 +19,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Route List
 app.use('/api/auth', require('./routes/userRoute'))
+app.use('/api/product', require('./routes/productRoute'))
 
 // Test Api
 app.get('/', (req, res) => res.render('index', { title: 'Sanchari Test Server'}));
