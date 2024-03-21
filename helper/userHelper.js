@@ -1,5 +1,6 @@
 const bcryptjs = require('bcryptjs');
 const JsonWebToken = require('jsonwebtoken');
+const tokenModel = require('../models/tokenModel');
 
 exports.encryptPassword = async (password) => {
     const salt = await bcryptjs.genSalt(10);
