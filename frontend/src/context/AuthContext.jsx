@@ -1,6 +1,11 @@
 import React, { createContext, useContext, useState } from 'react'
 
-const AuthContext = createContext({ isAuthorized: false, userDetails: null, });
+const AuthContext = createContext({
+    isAuthorized: false,
+    userDetails: null,
+    setIsAuthorized: () => { },
+    setUserDetails: () => { },
+})
 
 const AuthProvider = ({ children }) => {
     const [isAuthorized, setIsAuthorized] = useState(false)
