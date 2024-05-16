@@ -9,7 +9,7 @@ exports.uniqueCheckValidation = [
 ]
 
 exports.registrationValidation = [
-    body('userName').notEmpty().withMessage('Provide your username for registration').isLowercase().withMessage('Provide your valid username for registration').isLength({ min: 5, max: 30 }).withMessage('Provide your valid username for registration').custom(value => !/\s/.test(value)).withMessage('No spaces are allowed in the registration').custom(async(value) => {
+    body('userName').notEmpty().withMessage('Provide your username for registration').isLowercase().withMessage('Provide your valid username for registration').isLength({ min: 5, max: 30 }).withMessage('Provide your valid username for registration').custom(value => !/\s/.test(value)).withMessage('No spaces are allowed in the registration').custom(async (value) => {
         return await userModel.findOne({ userName: value }).then((result) => {
             if (result) {
                 return Promise.reject('Username already exists');
@@ -27,12 +27,12 @@ exports.registrationValidation = [
             }
         })
     }),
-    body('password').notEmpty().withMessage('Provide your password for registration').isLength({ min: 5, max: 30 }).withMessage('Provide your valid password for registration').custom(value =>!/\s/.test(value)).withMessage('No spaces are allowed in the password'),
+    body('password').notEmpty().withMessage('Provide your password for registration').isLength({ min: 5, max: 30 }).withMessage('Provide your valid password for registration').custom(value => !/\s/.test(value)).withMessage('No spaces are allowed in the password'),
 ]
 
 exports.loginValidation = [
     body('email').notEmpty().withMessage('Provide your email id for login').isEmail().withMessage('Provide your valid email id for login'),
-    body('password').notEmpty().withMessage('Provide your password for login').isLength({ min: 5, max: 30 }).withMessage('Provide your valid password for login').custom(value =>!/\s/.test(value)).withMessage('No spaces are allowed in the password'),
+    body('password').notEmpty().withMessage('Provide your password for login').isLength({ min: 5, max: 30 }).withMessage('Provide your valid password for login').custom(value => !/\s/.test(value)).withMessage('No spaces are allowed in the password'),
 ]
 
 exports.removeUserValidation = [
@@ -59,5 +59,5 @@ exports.addUserValidation = [
         })
     }),
     body('password').notEmpty().withMessage('Provide your password for add on this platform').isLength({ min: 5, max: 30 }).withMessage('Provide your valid password for add on this platform').custom(value => !/\s/.test(value)).withMessage('No spaces are allowed in the password'),
-    body('role').notEmpty().withMessage('Provide your role for add on this platform').isLowercase().withMessage('Provide your valid role for add on this platform').isIn(['admin', 'user', 'manager']).withMessage('Provide your valid role for add a account in the system'),
+    body('role').notEmpty().withMessage('Provide your role for add on this platform').isLowercase().withMessage('Provide your valid role for add on this platform').isIn(['admin', 'user', 'manager']).withMessage('Provide your valid role for add a account in the system. Role should be admin, user, manager'),
 ]

@@ -8,7 +8,7 @@ exports.uniqueCheck = (req, res) => {
         const { email, userName } = req.query
 
         if (userName) {
-            userModel.findOne({ userName: { $regex: userName, $options: "si" } }).then((result) => {
+            userModel.findOne({ userName }).then((result) => {
                 if (result) {
                     return res.status(200).json({ message: messageHelper.userCheck.success })
                 }
@@ -99,7 +99,7 @@ exports.removeUser = (req, res) => {
     }
 }
 
-exports.logout = (req, res) => { 
+exports.logout = (req, res) => {
     try {
         const { tokenDetails } = req
 
