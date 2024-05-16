@@ -1,5 +1,6 @@
 const bcryptjs = require('bcryptjs');
 const tokenMode = require("../models/token.mode")
+const jwt = require('jsonwebtoken')
 
 exports.encryptPassword = async (password) => {
     let salt = bcryptjs.genSaltSync(10)
