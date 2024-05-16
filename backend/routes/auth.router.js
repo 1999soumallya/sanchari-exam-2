@@ -1,4 +1,4 @@
-const { uniqueCheck, register, login, addUser, removeUser, getAllUser } = require('../controllers/auth.controller');
+const { uniqueCheck, register, login, addUser, removeUser, getAllUser, logout } = require('../controllers/auth.controller');
 const { isAuthorized, isSuperAdmin, validateRequest } = require('../middleware');
 const { uniqueCheckValidation, registrationValidation, loginValidation, removeUserValidation, addUserValidation } = require('../validations/auth.validation');
 
@@ -11,6 +11,6 @@ Router.route('/add-user').post([isAuthorized, isSuperAdmin], [addUserValidation,
 Router.route('/remove-user/:id').delete([isAuthorized, isSuperAdmin], [removeUserValidation, validateRequest], removeUser)
 Router.route('/get-all-user').get([isAuthorized, isSuperAdmin], getAllUser)
 
-Router.route('/logout').get(isAuthorized, uniqueCheck)
+Router.route('/logout').get(isAuthorized, logout)
 
 module.exports = Router;

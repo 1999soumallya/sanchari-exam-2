@@ -1,6 +1,5 @@
 import React from "react";
 import { Navigate, Outlet } from 'react-router-dom'
-import { getCookie } from "../helper/cookiesHelper";
 import { AuthState } from "../context/AuthContext";
 
 export const BeforeLogin = () => {
