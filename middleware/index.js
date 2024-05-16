@@ -1,49 +1,54 @@
-const { validationResult: validation } = require('express-validator');
-const tokenModel = require('../models/tokenModel');
-const { verifyToken, decodeToken } = require('../helper/userHelper');
-
-exports.validateRequest = async (req, res, next) => {
-    try {
-        if (validation(req).isEmpty()) {
-            return next();
-        }
-        return res.status(403).json({ message: 'Please fill all mandatory fields', success: false, errors: validation(req).array() });
-    } catch (error) {
-        next(error);
-    }
-}
+const { verifyToken } = require("../helpers/auth.helper")
+const messageHelper = require("../helpers/message.helper")
+const tokenMode = require("../models/token.mode")
+const userModel = require("../models/user.model")
 
 exports.isAuthorized = async (req, res, next) => {
     try {
         if (req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
-            let token = req.headers.authorization.split(' ')[1]
 
-            if (!await verifyToken(token)) {
-                return res.status(401).json({ message: "Please provide valid authentication token", success: false })
-            }
+            let token = req.headers.authorization.split(" ")[1]
 
-            let userId = decodeToken(token).data
-            let tokenDetails = await tokenModel.findOne({ token: token, user: userId }).populate("user")
+            await verifyToken(token).then(async () => {
 
-            if (!tokenDetails) {
-                return res.status(401).json({ message: "Please provide valid authentication token", success: false })
-            }
+                let tokenDetails = await tokenMode.findOne({ token: token })
 
-            req.token = token
-            req.tokenDetails = tokenDetails
+                if (!tokenDetails) {
+                    return res.status(401).json({ message: messageHelper.middleware.validToken, success: false })
+                }
 
-            if (!tokenDetails.user) {
-                return res.status(401).json({ message: "User find failed", success: false })
-            }
+                req.tokenDetails = tokenDetails
 
-            req.userDetails = tokenDetails.user
-            next()
+                let userDetails = await userModel.findById(tokenDetails.user)
+
+                if (!userDetails) {
+                    return res.status(401).json({ message: messageHelper.middleware.unauthorized, success: false })
+                }
+
+                req.userDetails = userDetails
+
+                next()
+
+            }).catch((error) => {
+                return res.status(401).json({ message: messageHelper.middleware.validToken, success: false })
+            })
 
         } else {
-            return res.status(401).json({ message: "Please provide your authentication token", success: false })
+            return res.status(401).json({ message: messageHelper.middleware.requireToken, success: false })
         }
+    } catch (error) {
+        res.status(500).json(messageHelper.commonError(error))
     }
-    catch (error) {
-        res.status(500).json({ message: "Internal server error! please try again after some time", success: false, error: error.stack })
+}
+
+exports.isSuperAdmin = (req, res, next) => {
+    try {        
+        if (req.userDetails.role == "super-admin") {
+            next()
+        } else {
+            return res.status(401).json({ message: messageHelper.middleware.unauthorized, success: false })
+        }
+    } catch (error) {
+        res.status(500).json(messageHelper.commonError(error))
     }
 }

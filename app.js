@@ -18,20 +18,16 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Route List
-app.use('/api/auth', require('./routes/userRoute'))
-app.use('/api/product', require('./routes/productRoute'))
-
-// Test Api
-app.get('/', (req, res) => res.render('index', { title: 'Sanchari Test Server'}));
+// Router List
+app.use('/api/auth', require('./routes/auth.router'));
 
 // catch 404 and forward to error handler
-app.use(function (req, res, next) {
+app.use(function(req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function (err, req, res, next) {
+app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
