@@ -70,9 +70,9 @@ exports.login = (req, res) => {
 
 exports.addUser = async (req, res) => {
     try {
-        const { userName, email, password } = req.body
+        const { userName, email, password, role } = req.body
 
-        userModel.create({ userName, email, password: await encryptPassword(password) }).then((result) => {
+        userModel.create({ userName, email, password: await encryptPassword(password), role }).then((result) => {
             res.status(200).json({ message: messageHelper.addUser.success, data: result })
         }).catch((error) => {
             res.status(500).json({ message: messageHelper.addUser.failed, error: error.stack })
