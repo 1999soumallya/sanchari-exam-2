@@ -1,7 +1,15 @@
+const { validationResult } = require("express-validator")
 const { verifyToken } = require("../helpers/auth.helper")
 const messageHelper = require("../helpers/message.helper")
 const tokenMode = require("../models/token.mode")
 const userModel = require("../models/user.model")
+
+exports.validateRequest = (req, res, next) => {
+    if (!validationResult(req).isEmpty()) {
+        return res.status(400).json(messageHelper.validationError(validationResult(req).array()))
+    }
+    next()
+}
 
 exports.isAuthorized = async (req, res, next) => {
     try {

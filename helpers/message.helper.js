@@ -34,6 +34,10 @@ module.exports = {
         failed: "User remove process failed",
         notfound: "User is not found in the system",
     },
+    getAllUser: {
+        success: "All users are successfully fetched",
+        failed: "User fetch process failed",
+    },
     logout: {
         success: "You are successfully logged out",
         failed: "Logout process failed",

@@ -1,4 +1,5 @@
 const { encryptPassword, comparePassword, generateToken } = require("../helpers/auth.helper")
+const { pagination } = require("../helpers/helpers")
 const messageHelper = require("../helpers/message.helper")
 const tokenMode = require("../models/token.mode")
 const userModel = require("../models/user.model")
@@ -94,6 +95,22 @@ exports.removeUser = (req, res) => {
         }).catch((error) => {
             res.status(500).json({ message: messageHelper.removeUser.failed, error: error.stack })
         })
+    } catch (error) {
+        res.status(500).json(messageHelper.commonError(error))
+    }
+}
+
+exports.getAllUser = async (req, res) => {
+    try {
+
+        const paginationObject = pagination(req.query.limit || 10, req.query.page || 1, await userModel.countDocuments({ role: { $ne: 'super-admin' } }))
+
+        userModel.find({ role: { $ne: 'super-admin' } }).skip(paginationObject.skip).limit(paginationObject.limit).then((result) => {
+            res.status(200).json({ message: messageHelper.getAllUser.success, data: result, pagination: paginationObject })
+        }).catch((error) => {
+            res.status(500).json({ message: messageHelper.getAllUser.failed, error: error.stack })
+        })
+
     } catch (error) {
         res.status(500).json(messageHelper.commonError(error))
     }
