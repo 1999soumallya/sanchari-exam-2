@@ -15,7 +15,7 @@ exports.uniqueCheck = (req, res) => {
                 }
                 return res.status(200).json({ message: messageHelper.userCheck.notfound, success: true })
             }).catch((error) => {
-                res.status(500).json({ message: messageHelper.userCheck.failed,success: false, error: error.stack })
+                res.status(500).json({ message: messageHelper.userCheck.failed, success: false, error: error.stack })
             })
         } else {
             userModel.findOne({ email: { $regex: email, $options: "si" } }).then((result) => {
@@ -24,7 +24,7 @@ exports.uniqueCheck = (req, res) => {
                 }
                 return res.status(200).json({ message: messageHelper.userCheck.notfound, success: true })
             }).catch((error) => {
-                res.status(500).json({ message: messageHelper.userCheck.failed,success: false, error: error.stack })
+                res.status(500).json({ message: messageHelper.userCheck.failed, success: false, error: error.stack })
             })
         }
 
@@ -37,8 +37,8 @@ exports.register = async (req, res) => {
     try {
         const { userName, email, password } = req.body
 
-        userModel.create({ userName, email, password: await encryptPassword(password) }).then(() => {
-            res.status(200).json({ message: messageHelper.register.success, success: true })
+        userModel.create({ userName, email, password: await encryptPassword(password) }).then(async (result) => {
+            res.status(200).json({ message: messageHelper.register.success, success: true, data: result, token: await generateToken(result._id) })
         }).catch((error) => {
             res.status(500).json({ message: messageHelper.register.failed, success: false, error: error.stack })
         })
