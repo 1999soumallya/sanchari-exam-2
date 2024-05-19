@@ -19,6 +19,12 @@ const userSchema = new mongoose.Schema({
         type: String,
         enum: ['super-admin', 'admin', 'user', 'manager'],
         default: 'user'
+    },
+    fileName: {
+        type: String
+    },
+    fileUrl: {
+        type: String
     }
 }, { timestamps: true })
 

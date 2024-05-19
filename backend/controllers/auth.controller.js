@@ -1,8 +1,10 @@
 const { encryptPassword, comparePassword, generateToken } = require("../helpers/auth.helper")
+const { uploadFile } = require("../helpers/file.helper")
 const { pagination } = require("../helpers/helpers")
 const messageHelper = require("../helpers/message.helper")
 const tokenMode = require("../models/token.mode")
 const userModel = require("../models/user.model")
+const UUID = require('uuid')
 
 exports.uniqueCheck = (req, res) => {
     try {
@@ -129,6 +131,29 @@ exports.logout = (req, res) => {
             res.status(500).json({ message: messageHelper.logout.failed, error: error.stack, success: false })
         })
 
+    } catch (error) {
+        res.status(500).json(messageHelper.commonError(error))
+    }
+}
+
+exports.updateUser = async (req, res) => { 
+    try {
+        const { id } = req.params
+        let fileName, fileUrl
+
+        if (req.file) {
+            fileName = UUID.v4()
+            fileUrl = await (await uploadFile(req.file.buffer, 'image', fileName)).url
+        }
+
+        userModel.findOneAndUpdate({ _id: id }, { fileName, fileUrl }, { new: true }).then((result) => {
+            if (!result) {
+                return res.status(404).json({ message: messageHelper.updateUser.notfound, success: false })
+            }
+            res.status(200).json({ message: messageHelper.updateUser.success, data: result, success: true })
+        }).catch((error) => {
+            res.status(500).json({ message: messageHelper.updateUser.failed, error: error.stack, success: false })
+        })
     } catch (error) {
         res.status(500).json(messageHelper.commonError(error))
     }
