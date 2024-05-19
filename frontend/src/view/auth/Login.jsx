@@ -23,6 +23,7 @@ export default function Login() {
         axios.post('/api/auth/login', data).then(({ data }) => {
             if (data.success) {
                 toast.success(data.message)
+                localStorage.setItem('user_details', JSON.stringify(data.data))
                 setCookie('auth_token', data.token)
                 setIsAuthorized(true)
                 setUserDetails(data.data)

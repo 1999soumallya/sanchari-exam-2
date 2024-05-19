@@ -25,6 +25,7 @@ export default function Registration() {
         axios.post('/api/auth/registration', data).then(({ data }) => {
             if (data.success) {
                 toast.success(data.message)
+                localStorage.setItem('user_details', JSON.stringify(data.data))
                 setCookie('auth_token', data.token)
                 setIsAuthorized(true)
                 setUserDetails(data.data)

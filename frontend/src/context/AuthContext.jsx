@@ -17,6 +17,7 @@ const AuthProvider = ({ children }) => {
     useEffect(() => {
         const auth_token = getCookie('auth_token')
         if (auth_token) {
+            setUserDetails(JSON.parse(localStorage.getItem('user_details')))
             setIsAuthorized(true)
         } else {
             setIsAuthorized(false)
