@@ -1,9 +1,10 @@
-import { Route, Routes } from 'react-router-dom';
-import './App.css';
-import Login from './view/auth/Login';
-import Registration from './view/auth/Registraction';
-import { AfterLogin, BeforeLogin } from './guard/AuthGuard';
-import HomeView from './view/dashboard/Home';
+import { Route, Routes } from "react-router-dom";
+import MainLayout from "./layout/MainLayout";
+import Dashboard from "./view/Dashboard";
+import Login from "./view/auth/Login";
+import { AfterLogin, BeforeLogin } from "./guard/AuthGuard";
+import Registration from "./view/auth/Registration";
+import NotFoundError from "./view/404";
 
 function App() {
   return (
@@ -14,9 +15,12 @@ function App() {
       </Route>
 
       <Route path='/dashboard' element={<AfterLogin />}>
-        <Route index element={<HomeView />} />
+        <Route element={<MainLayout />}>
+          <Route index element={<Dashboard />} />
+        </Route>
       </Route>
 
+      <Route path="*" element={<NotFoundError />} />
     </Routes>
   );
 }

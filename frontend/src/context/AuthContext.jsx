@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState } from 'react'
+import React, { createContext, useContext, useEffect, useState } from 'react'
+import { getCookie } from '../helper/cookiesHelper'
 
 const AuthContext = createContext({
     isAuthorized: false,
@@ -12,6 +13,16 @@ const AuthProvider = ({ children }) => {
     const [userDetails, setUserDetails] = useState(null)
 
     const value = { isAuthorized, userDetails, setIsAuthorized, setUserDetails }
+
+    useEffect(() => {
+        const auth_token = getCookie('auth_token')
+        if (auth_token) {
+            setIsAuthorized(true)
+        } else {
+            setIsAuthorized(false)
+            setUserDetails(null)
+        }
+    }, [])
 
     return (
         <AuthContext.Provider value={value}>
