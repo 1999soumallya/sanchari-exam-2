@@ -11,7 +11,7 @@ import axios from '../../config/axios'
 export default function Registration() {
 
     const formSchema = YUP.object().shape({
-        username: YUP.string().required('Username is required'),
+        userName: YUP.string().required('Username is required'),
         email: YUP.string().required('Email is required').email('Provide valid email address'),
         password: YUP.string().required('Password is required').min(6, 'Password must be at least 6 characters'),
         confirmPassword: YUP.string().oneOf([YUP.ref('password'), null], 'Passwords must match').required('Confirm Password is required'),
@@ -52,9 +52,9 @@ export default function Registration() {
                             Username
                         </label>
                         <div className="mt-2">
-                            <input id="username" name="username" type="text" {...register('username')} autoComplete="username" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3" />
+                            <input id="username" name="username" type="text" {...register('userName')} autoComplete="username" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3" />
                         </div>
-                        {errors.username && <p className='text-red-500 font-mono text-sm absolute'>{errors.username.message}</p>}
+                        {errors.userName && <p className='text-red-500 font-mono text-sm absolute'>{errors.userName.message}</p>}
                     </div>
 
                     <div>

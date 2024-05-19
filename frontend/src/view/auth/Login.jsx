@@ -11,10 +11,8 @@ import * as YUP from 'yup'
 export default function Login() {
 
     const formSchema = YUP.object().shape({
-        username: YUP.string().required('Username is required'),
         email: YUP.string().required('Email is required').email('Provide valid email address'),
         password: YUP.string().required('Password is required').min(6, 'Password must be at least 6 characters'),
-        confirmPassword: YUP.string().oneOf([YUP.ref('password'), null], 'Passwords must match').required('Confirm Password is required'),
     })
 
     const { register, handleSubmit, formState: { errors } } = useForm({ resolver: yupResolver(formSchema), mode: 'all' })
