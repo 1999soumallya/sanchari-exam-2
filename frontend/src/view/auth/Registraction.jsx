@@ -57,7 +57,7 @@ export default function Registration() {
                                 <Form.Control placeholder="password" aria-label="password" type='password' aria-describedby="basic-addon1" required value={value.password} onChange={(event) => setValue({ ...value, password: event.target.value })} />
                             </InputGroup>
 
-                            <Button type='submit' variant="outline-success" className='w-100'>Success</Button>
+                            <Button type='submit' variant="outline-success" className='w-100'>Register</Button>
                         </Form>
                     </Card.Body>
                     <Card.Footer>
