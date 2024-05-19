@@ -1,7 +1,11 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
+import axios from '../../config/axios';
+import { AuthState } from '../../context/AuthContext';
+import { toast } from 'react-toastify';
 
 export default function Profile() {
 
+    const [profilePicture, setProfilePicture] = useState(null)
 
     useEffect(() => {
         const dropzone = document.getElementById('dropzone');
@@ -41,6 +45,21 @@ export default function Profile() {
         }
     }, [])
 
+    const { setUserDetails, userDetails } = AuthState()
+
+    const handleUpdateProfile = () => {
+        axios.post('/api/auth/update-user').then(({ data }) => {
+            if (data.success) {
+                toast.success(data.message)
+                setUserDetails(null)
+            } else {
+                toast.error(data.message)
+            }
+        }).catch((error) => {
+            toast.error(error.response ? error.response.data.message : error.toString())
+        })
+    }
+
     return (
         <div className="bg-white border-4 rounded-lg shadow relative m-10">
             <div className="flex items-start justify-between p-5 border-b rounded-t">
@@ -50,7 +69,7 @@ export default function Profile() {
                 <form action="#">
                     <div className="grid grid-cols-6 gap-6 mb-4">
                         <div className="col-span-6 sm:col-span-3 relative border-2 border-gray-300 border-dashed rounded-lg p-6" id="dropzone">
-                            <input type="file" className="absolute inset-0 w-full h-full opacity-0 z-50" />
+                            <input type="file" id="file-upload" className="absolute inset-0 w-full h-full opacity-0 z-50" onChange={(event) => setProfilePicture(event.target.files[0])} />
                             <div className="text-center">
                                 <img className="mx-auto h-12 w-12" src="https://www.svgrepo.com/show/357902/image-upload.svg" alt="" />
                                 <h3 className="mt-2 text-sm font-medium text-gray-900">
@@ -58,14 +77,14 @@ export default function Profile() {
                                         <span>Drag and drop</span>
                                         <span className="text-indigo-600"> or browse</span>
                                         <span>to upload</span>
-                                        <input id="file-upload" name="file-upload" type="file" className="sr-only" />
+                                        {/* <input id="file-upload" name="file-upload" type="file" className="sr-only" /> */}
                                     </label>
                                 </h3>
                                 <p className="mt-1 text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
                             </div>
                         </div>
                         <div className='col-span-6 sm:col-span-3'>
-                            <img src="" className="mx-auto max-h-40 hidden" id="preview" alt='' />
+                            <img src={""} className="mx-auto max-h-40 hidden" id="preview" alt='' />
                         </div>
                     </div>
 
