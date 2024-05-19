@@ -103,7 +103,7 @@ export default function Dashboard() {
                   {
                     userList.length > 0 ? userList.map((element, index) => (
                       <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700" key={element._id}>
-                        <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black">
                           {index + 1 + ((page - 1) * Limit)}
                         </th>
                         <td className="px-6 py-4">

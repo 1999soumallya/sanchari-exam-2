@@ -12,7 +12,7 @@ Router.route('/add-user').post([isAuthorized, isSuperAdmin], [addUserValidation,
 Router.route('/remove-user/:id').delete([isAuthorized, isSuperAdmin], [removeUserValidation, validateRequest], removeUser)
 Router.route('/get-all-user').get([isAuthorized, isSuperAdmin], getAllUser)
 
-Router.route('/update-user').post(isAuthorized, imageUpload, updateUser)
+Router.route('/update-user').put(isAuthorized, imageUpload, updateUser)
 
 Router.route('/logout').get(isAuthorized, logout)
 

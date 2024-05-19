@@ -21,7 +21,7 @@ function classNames(...classes) {
 
 export default function Header() {
 
-    const { setIsAuthorized, setUserDetails } = AuthState()
+    const { setIsAuthorized, setUserDetails, userDetails } = AuthState()
 
     const handleLogout = () => {
         axios.get('/api/auth/logout').then(({ data }) => {
@@ -58,13 +58,13 @@ export default function Header() {
                                 </Disclosure.Button>
                             </div>
                             <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-                                <div className="flex flex-shrink-0 items-center">
+                                <Link to={'/dashboard'} className="flex flex-shrink-0 items-center">
                                     <img
                                         className="h-8 w-auto"
                                         src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
                                         alt="Your Company"
                                     />
-                                </div>
+                                </Link>
                                 <div className="hidden sm:ml-6 sm:block">
                                     {/* <div className="flex space-x-4">
                                         {navigation.map((item) => (
@@ -95,7 +95,7 @@ export default function Header() {
                                             <span className="sr-only">Open user menu</span>
                                             <img
                                                 className="h-8 w-8 rounded-full"
-                                                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                                                src={userDetails?.fileUrl || "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"}
                                                 alt=""
                                             />
                                         </Menu.Button>

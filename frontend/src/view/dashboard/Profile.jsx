@@ -47,11 +47,16 @@ export default function Profile() {
 
     const { setUserDetails, userDetails } = AuthState()
 
-    const handleUpdateProfile = () => {
-        axios.post('/api/auth/update-user').then(({ data }) => {
+    const handleUpdateProfile = (event) => {
+        event.preventDefault()
+        const formData = new FormData()
+        formData.append('image', profilePicture)
+
+        axios.put('/api/auth/update-user', formData).then(({ data }) => {
             if (data.success) {
                 toast.success(data.message)
-                setUserDetails(null)
+                localStorage.setItem('user_details', JSON.stringify(data.data))
+                setUserDetails(data.data)
             } else {
                 toast.error(data.message)
             }
@@ -65,8 +70,8 @@ export default function Profile() {
             <div className="flex items-start justify-between p-5 border-b rounded-t">
                 <h3 className="text-xl font-semibold">Update Details</h3>
             </div>
-            <div className="p-6 space-y-6">
-                <form action="#">
+            <form onSubmit={(event) => handleUpdateProfile(event)}>
+                <div className="p-6 space-y-6">
                     <div className="grid grid-cols-6 gap-6 mb-4">
                         <div className="col-span-6 sm:col-span-3 relative border-2 border-gray-300 border-dashed rounded-lg p-6" id="dropzone">
                             <input type="file" id="file-upload" className="absolute inset-0 w-full h-full opacity-0 z-50" onChange={(event) => setProfilePicture(event.target.files[0])} />
@@ -84,93 +89,37 @@ export default function Profile() {
                             </div>
                         </div>
                         <div className='col-span-6 sm:col-span-3'>
-                            <img src={""} className="mx-auto max-h-40 hidden" id="preview" alt='' />
+                            <img src={userDetails?.fileUrl} className={userDetails.fileUrl ? "mx-auto max-h-40" : "mx-auto max-h-40 hidden"} id="preview" alt='' />
                         </div>
                     </div>
-
-
 
                     <div className="grid grid-cols-6 gap-6">
                         <div className="col-span-6 sm:col-span-3">
                             <label htmlFor="username" className="text-sm font-medium text-gray-900 block mb-2">
                                 Username
                             </label>
-                            <input type="text" name="username" id="username" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="username" />
+                            <input readOnly type="text" value={userDetails?.userName} name="username" id="username" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="username" />
                         </div>
                         <div className="col-span-6 sm:col-span-3">
-                            <label
-                                htmlFor="category"
-                                className="text-sm font-medium text-gray-900 block mb-2"
-                            >
-                                Category
+                            <label htmlFor="email" className="text-sm font-medium text-gray-900 block mb-2">
+                                Email
                             </label>
-                            <input
-                                type="text"
-                                name="category"
-                                id="category"
-                                className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                                placeholder="Electronics"
-                                required=""
-                            />
+                            <input readOnly value={userDetails?.email} type="text" name="email" id="email" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="Electronics" />
                         </div>
                         <div className="col-span-6 sm:col-span-3">
-                            <label
-                                htmlFor="brand"
-                                className="text-sm font-medium text-gray-900 block mb-2"
-                            >
-                                Brand
+                            <label htmlFor="email" className="text-sm font-medium text-gray-900 block mb-2">
+                                User Role
                             </label>
-                            <input
-                                type="text"
-                                name="brand"
-                                id="brand"
-                                className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                                placeholder="Apple"
-                                required=""
-                            />
-                        </div>
-                        <div className="col-span-6 sm:col-span-3">
-                            <label
-                                htmlFor="price"
-                                className="text-sm font-medium text-gray-900 block mb-2"
-                            >
-                                Price
-                            </label>
-                            <input
-                                type="number"
-                                name="price"
-                                id="price"
-                                className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                                placeholder="$2300"
-                                required=""
-                            />
-                        </div>
-                        <div className="col-span-full">
-                            <label
-                                htmlFor="product-details"
-                                className="text-sm font-medium text-gray-900 block mb-2"
-                            >
-                                Product Details
-                            </label>
-                            <textarea
-                                id="product-details"
-                                rows={6}
-                                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-4"
-                                placeholder="Details"
-                                defaultValue={""}
-                            />
+                            <input readOnly value={userDetails?.role} type="text" name="email" id="email" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="Electronics" />
                         </div>
                     </div>
-                </form>
-            </div>
-            <div className="p-6 border-t border-gray-200 rounded-b">
-                <button
-                    className="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-                    type="submit"
-                >
-                    Save all
-                </button>
-            </div>
+                </div>
+                <div className="p-6 border-t border-gray-200 rounded-b">
+                    <button className="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center" type="submit">
+                        Update Profile
+                    </button>
+                </div>
+            </form>
         </div>
 
     )

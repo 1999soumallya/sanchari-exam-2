@@ -38,6 +38,11 @@ module.exports = {
         success: "All users are successfully fetched",
         failed: "User fetch process failed",
     },
+    updateUser: {
+        success: "User is successfully updated",
+        failed: "User update process failed",
+        notfound: "User is not found in the system",
+    },
     logout: {
         success: "You are successfully logged out",
         failed: "Logout process failed",

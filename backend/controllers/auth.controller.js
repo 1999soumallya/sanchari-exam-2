@@ -138,7 +138,7 @@ exports.logout = (req, res) => {
 
 exports.updateUser = async (req, res) => { 
     try {
-        const { id } = req.params
+        const { userDetails } = req
         let fileName, fileUrl
 
         if (req.file) {
@@ -146,7 +146,7 @@ exports.updateUser = async (req, res) => {
             fileUrl = await (await uploadFile(req.file.buffer, 'image', fileName)).url
         }
 
-        userModel.findOneAndUpdate({ _id: id }, { fileName, fileUrl }, { new: true }).then((result) => {
+        userModel.findOneAndUpdate({ _id: userDetails.id }, { fileName, fileUrl }, { new: true }).then((result) => {
             if (!result) {
                 return res.status(404).json({ message: messageHelper.updateUser.notfound, success: false })
             }
